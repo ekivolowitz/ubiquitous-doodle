@@ -32,4 +32,4 @@ services:
       - ./:/app
     depends_on:
       - db
-    command: sh -c "wait 1000 && cd /app/star_tides/services/sql/database/migrations && alembic upgrade head"
+    command: sh -c "cd /app/star_tides/services/sql/database/migrations && alembic upgrade head"
