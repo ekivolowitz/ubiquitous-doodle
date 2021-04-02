@@ -22,6 +22,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    ports: ["5432:5432"]
+    expose: ['5432']
   migrate:
     build:
       context: ./
@@ -30,5 +32,4 @@ services:
       - ./:/app
     depends_on:
       - db
-#    command: sh -c "cd /app/star_tides/services/sql/database/migrations && alembic upgrade head"
-    command: sh -c "ls /app/star_tides/services/sql/database"
+    command: sh -c "wait 1000 && cd /app/star_tides/services/sql/database/migrations && alembic upgrade head"
