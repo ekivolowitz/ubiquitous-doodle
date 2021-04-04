@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 BASE_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../../../../../')
-print(f"\n\nBASE_DIR: {BASE_DIR}")
+
 sys.path.append(BASE_DIR)
 
 # this is the Alembic Config object, which provides
