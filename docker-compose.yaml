@@ -30,10 +30,12 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_DATABASE: star_tides
     ports:
       - 27017:27017
     volumes:
-      - ./data/mongo:/data/db
+      - db-data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
   migrate:
     build:
       context: ./
@@ -43,3 +45,6 @@ services:
     depends_on:
       - db
     command: sh -c "cd /app/star_tides/services/sql/database/migrations && alembic upgrade head"
+
+volumes:
+  db-data:
