@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>StarTides</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"></head>
+<body>
+  <app-root></app-root>
+  <script src="{{ url_for('static', filename='runtime.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='polyfills.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='vendor.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='main.js') }}" defer></script>
+</body>
+</html>

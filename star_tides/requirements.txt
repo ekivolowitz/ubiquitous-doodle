@@ -5,3 +5,4 @@ alembic
 flask_sqlalchemy
 flask-mongoengine
 mongodb-migrations
+celery[redis]

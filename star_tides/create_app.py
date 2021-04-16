@@ -1,25 +1,34 @@
-from flask import Flask
+from flask import Flask, render_template
 from star_tides.services.sql.database import db
-from mongoengine import connect, Document, StringField
-from star_tides.services.mongo.models.UserModel import User
+from mongoengine import connect
+from celery import Celery
+from star_tides.api.blueprint import bp
+from star_tides.config.settings import REDIS_URL
+import os
 
+def create_celery_app(app=None):
 
-class User(Document):
-    first_name = StringField(required=True)
-    last_name = StringField(required=True)
-    email = StringField(required=True)
+    app = app or create_app()
+
+    celery = Celery(app.import_name, broker=REDIS_URL, backend=REDIS_URL)
+    # celery.conf.update(app.config.get('CELERY_CONFIG', {}))
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+
+    celery.Task = ContextTask
+
+    return celery
+
 
 def create_app():
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@db:5432/postgres'
-    # app.config['MONGODB_SETTINGS'] = {
-    #     "db" : "star_tides",
-    #     "host" : "mongodb://mongodb_container",
-    #     "port" : 27017,
-    #     "username" : " evan",
-    #     "password" : "password",
-    #     "authentication_source" : "star_tides"
-    # }
+    app = Flask(__name__, static_url_path='/static')
+    app.config.from_object('star_tides.config.settings')
 
     from star_tides.services.sql.database.models import ALL_MODELS
     db.init_app(app)
@@ -30,27 +39,13 @@ def create_app():
         host='mongodb://mongodb_container:27017/star_tides?authSource=star_tides'
     )
 
-    from star_tides.services.sql.database.models.UserModel import UserModel
-
     @app.route('/')
-    def foo():
-        user = UserModel(
-            first_name = "Evan",
-            last_name = "K",
-            email="foo@barbas.com"
-        )
-        #
-        mdb_user = User(first_name="Foobar", last_name="Shabam", email="shmoili@tabouli.com")
-        mdb_user.save()
-        db.session.add(user)
-        db.session.commit()
+    def index():
+        return render_template('index.html')
 
-        return str(f"Postgres user: {user.id}\nMongo User: {mdb_user.email}")
-        # numShmoilis = 0
-        # for user in User.objects:
-        #     if user.first_name == "Foobar":
-        #         numShmoilis += 1
-        # return f"There are {numShmoilis} Foobar Shabams"
+    app.register_blueprint(bp)
+
     return app
 
 
+celery_app = create_celery_app()
