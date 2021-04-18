@@ -55,7 +55,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - "redis"
-    command: bash -c "pip install /app && celery -A \"star_tides.create_app.celery_app\" worker --loglevel=info"
+    command: bash -c "pip install -e /app && celery -A \"star_tides.create_app.celery_app\" worker --loglevel=info"
     volumes:
       - ./:/app
 volumes:

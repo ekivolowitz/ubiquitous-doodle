@@ -10,18 +10,7 @@ def create_celery_app(app=None):
 
     app = app or create_app()
 
-    celery = Celery(app.import_name, broker=REDIS_URL, backend=REDIS_URL)
-    # celery.conf.update(app.config.get('CELERY_CONFIG', {}))
-    TaskBase = celery.Task
-
-    class ContextTask(TaskBase):
-        abstract = True
-
-        def __call__(self, *args, **kwargs):
-            with app.app_context():
-                return TaskBase.__call__(self, *args, **kwargs)
-
-    celery.Task = ContextTask
+    celery = Celery(app.import_name, broker=REDIS_URL, backend=REDIS_URL, include=['star_tides.core.tasks'])
 
     return celery
 

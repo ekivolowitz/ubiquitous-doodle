@@ -5,20 +5,19 @@ from star_tides.services.sql.database import db
 from celery.result import AsyncResult
 bp = Blueprint('bp', __name__)
 
-# @bp.route('/<task_id>')
-# def get_task(task_id):
-#     from star_tides.create_app import create_celery_app
-#     app = create_celery_app()
-#     return (str(app.tasks))
-    #
-    #
-    # res = AsyncResult(id=task_id, app=app)
-    # return str(res.status)
+
+@bp.route('/foo/<task_id>')
+def get_task(task_id):
+    from star_tides.create_app import celery_app
+
+    res = AsyncResult(id=task_id, app=celery_app)
+    return str(res.get())
 
 @bp.route('/foo')
 def index():
 
     from star_tides.core.tasks.test_action import add_numbers
+    from star_tides.core.tasks.second_test_action import another_task
 
     user = UserModel(
         first_name="Evan",
@@ -31,7 +30,7 @@ def index():
     db.session.add(user)
     db.session.commit()
 
-    result = add_numbers.delay(10, 10)
+    result = another_task.delay(10, 10)
+    other_result = add_numbers.delay(10, 15)
 
-
-    return str(f"Postgres user: {user.id}\nMongo User: {mdb_user.email}. Your task id is {result.task_id}")
+    return str(f"Postgres user: {user.id}\nMongo User: {mdb_user.email}.\nYour task id is {result.task_id}\n{other_result.task_id}")
