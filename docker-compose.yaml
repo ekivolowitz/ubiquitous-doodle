@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     environment:
       FLASK_DEBUG: 1
+      PYTHONUNBUFFERED: 1
     restart: always
     volumes:
       - ./:/app

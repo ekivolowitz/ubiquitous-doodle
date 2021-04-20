@@ -3,6 +3,7 @@ from star_tides.services.sql.database import db
 from mongoengine import connect
 from celery import Celery
 from star_tides.api.blueprint import bp
+from star_tides.api.routes.auth_route import auth
 from star_tides.config.settings import REDIS_URL
 import os
 
@@ -33,6 +34,7 @@ def create_app():
         return render_template('index.html')
 
     app.register_blueprint(bp)
+    app.register_blueprint(auth)
 
     return app
 
