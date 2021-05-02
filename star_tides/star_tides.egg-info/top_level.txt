@@ -2,3 +2,4 @@ api
 config
 core
 services
+tests

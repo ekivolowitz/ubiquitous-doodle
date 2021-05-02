@@ -22,6 +22,8 @@ class Controller(metaclass=ABCMeta):
 
         if body_type == 'json':
             body = request.get_json()
+        elif body_type == 'form':
+            body = request.form
 
         return body
 

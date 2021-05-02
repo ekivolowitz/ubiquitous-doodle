@@ -19,3 +19,11 @@ class CreateUserController(Controller):
         login = CreateUserAction(first_name, last_name, email, password).execute()
 
         return str(login)
+
+class GoogleSignInController(Controller):
+    def process_request(self):
+        body = self.get_request_body(body_type="form")
+
+        result = LoginUserAction(token=body.get('idtoken')).execute()
+
+        return str(result)

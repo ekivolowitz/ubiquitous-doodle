@@ -7,12 +7,16 @@ services:
     environment:
       FLASK_DEBUG: 1
       PYTHONUNBUFFERED: 1
+    env_file:
+      - .env
     restart: always
     volumes:
       - ./:/app
     depends_on:
       - db
       - mongodb_container
+      - redis
+      - worker
     ports:
       - 5000:5000
   test:

@@ -37,3 +37,9 @@ star_tides/star_tides.egg-info/PKG-INFO
 star_tides/star_tides.egg-info/SOURCES.txt
 star_tides/star_tides.egg-info/dependency_links.txt
 star_tides/star_tides.egg-info/top_level.txt
+star_tides/tests/__init__.py
+star_tides/tests/conftest.py
+star_tides/tests/fixtures/__init__.py
+star_tides/tests/fixtures/basic_user.py
+star_tides/tests/tests/__init__.py
+star_tides/tests/tests/test_pytest.py

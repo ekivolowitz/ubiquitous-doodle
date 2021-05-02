@@ -3,6 +3,9 @@ from star_tides.services.mongo.models.UserModel import User
 from star_tides.api.util.issue_jwt import create_jwt
 import bcrypt
 import time
+import string
+import secrets
+ALPHABET = string.ascii_letters + string.digits
 
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -30,8 +33,28 @@ class LoginUserAction(Action):
             print(f"{self.__class__.__name__} Password not a match")
         elif self.token:
             idinfo = id_token.verify_oauth2_token(self.token, requests.Request(), current_app.config['CLIENT_ID'])
-            # If the profile claims fields are in the token returned then nothing else is needed,
-            # Otherwise
+            email = idinfo.get('email')
+
+            if email is None:
+                print(f"{self.__class__.__name__} No email in claims: {email}")
+                return ""
+
+            user = User.objects(email=email).first()
+
+            if user is None:
+                print(f"{self.__class__.__name__} No account associated with email in claims: {email}\nCreating user")
+
+                first_name, last_name = idinfo.get('given_name'), idinfo.get('family_name')
+                password = ''.join(secrets.choice(ALPHABET) for i in range(16))
+                CreateUserAction(first_name, last_name, email, password).execute()
+
+                user = User.objects(email=email).first()
+                if user is None:
+                    raise Exception("User failed to create")
+
+            return create_jwt(user.email)
+
+
 
 
 class CreateUserAction(Action):

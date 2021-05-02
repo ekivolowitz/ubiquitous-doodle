@@ -15,3 +15,5 @@ CELERY_CONFIG = {
         'star_tides.core.tasks.test_action.add_numbers'
     ]
 }
+
+CLIENT_ID = os.getenv('CLIENT_ID')
