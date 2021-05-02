@@ -15,6 +15,22 @@ services:
       - mongodb_container
     ports:
       - 5000:5000
+  test:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      FLASK_DEBUG: 1
+      PYTHONUNBUFFERED: 1
+    restart: always
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+      - mongodb_container
+    ports:
+      - 5000:5000
+    command: bash -c "cd /app && pytest star_tides/tests/tests"
   db:
     image: postgres
     volumes:

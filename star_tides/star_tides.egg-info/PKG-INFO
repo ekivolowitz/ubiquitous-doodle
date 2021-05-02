@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: star-tides
+Version: 0.0.1
+Summary: A small example package
+Home-page: UNKNOWN
+Author: Evan Kivolowitz
+Author-email: evan@kivolowitz.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown

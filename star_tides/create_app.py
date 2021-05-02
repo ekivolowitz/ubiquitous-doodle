@@ -19,6 +19,7 @@ def create_celery_app(app=None):
 def create_app():
     app = Flask(__name__, static_url_path='/static')
     app.config.from_object('star_tides.config.settings')
+    app.config['SECRET_KEY'] = os.environ.get('SECRET') or "secret_key"
 
     from star_tides.services.sql.database.models import ALL_MODELS
     db.init_app(app)

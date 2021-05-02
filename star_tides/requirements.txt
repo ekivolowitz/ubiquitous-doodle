@@ -7,3 +7,7 @@ flask-mongoengine
 mongodb-migrations
 celery[redis]
 bcrypt
+pyjwt
+google-auth
+requests
+pytest
